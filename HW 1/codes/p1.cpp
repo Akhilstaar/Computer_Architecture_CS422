@@ -63,7 +63,7 @@ VOID Instruction(INS ins, VOID *v) {
     }
 
     // Categorize into Type A
-    xed_category_enum_t cat = INS_Category(ins);
+    xed_category_enum_t cat = static_cast<xed_category_enum_t>(INS_Category(ins));
     if (cat == XED_CATEGORY_NOP) {
         INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter,
             IARG_PTR, &Counters[NOP],
