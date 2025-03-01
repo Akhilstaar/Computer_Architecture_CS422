@@ -391,7 +391,7 @@ ADDRINT InsCount()	{
 
 ADDRINT Terminate(void)
 {
-        return (icount >= fast-forward-count + 1,000,000,000);
+	return (icount >= fast-forward-count + 1,000,000,000);
 }
 
 // Analysis routine to check fast-forward condition
