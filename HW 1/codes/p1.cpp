@@ -66,51 +66,51 @@ VOID Instruction(INS ins, VOID *v) {
     // Categorize into Type A
     xed_category_enum_t cat = static_cast<xed_category_enum_t>(INS_Category(ins));
     if (cat == XED_CATEGORY_NOP) {
-        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[NOP], IARG_UINT32, 1, IARG_END);
+        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[NOP], IARG_END);
     } 
     else if (cat == XED_CATEGORY_CALL) {
         if (INS_IsDirectCall(ins)) {
-            INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[DIRECT_CALL], IARG_UINT32, 1, IARG_END);
+            INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[DIRECT_CALL], IARG_END);
         } 
         else {
-            INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[INDIRECT_CALL], IARG_UINT32, 1, IARG_END);
+            INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[INDIRECT_CALL], IARG_END);
         }
     } 
     else if (cat == XED_CATEGORY_RET) {
-        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[RETURN], IARG_UINT32, 1, IARG_END);
+        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[RETURN], IARG_END);
     } 
     else if (cat == XED_CATEGORY_X87_ALU) {
-        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[FLOATING_POINT], IARG_UINT32, 1, IARG_END);
+        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[FLOATING_POINT], IARG_END);
     } 
     else if (cat == XED_CATEGORY_UNCOND_BR) {
-        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[UNCOND_BR], IARG_UINT32, 1, IARG_END);
+        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[UNCOND_BR], IARG_END);
     } 
     else if (cat == XED_CATEGORY_COND_BR) {
-        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[COND_BR], IARG_UINT32, 1, IARG_END);
+        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[COND_BR], IARG_END);
     } 
     else if (cat == XED_CATEGORY_LOGICAL) {
-        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[LOGICAL], IARG_UINT32, 1, IARG_END);
+        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[LOGICAL], IARG_END);
     } 
     else if (cat == XED_CATEGORY_ROTATE || cat == XED_CATEGORY_SHIFT) {
-        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[ROTATE_SHIFT], IARG_UINT32, 1, IARG_END);
+        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[ROTATE_SHIFT], IARG_END);
     } 
     else if (cat == XED_CATEGORY_FLAGOP) {
-        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[FLAGOP], IARG_UINT32, 1, IARG_END);
+        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[FLAGOP], IARG_END);
     } 
     else if (cat == XED_CATEGORY_AVX || cat == XED_CATEGORY_AVX2 || cat == XED_CATEGORY_AVX2GATHER || cat == XED_CATEGORY_AVX512) {
-        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[VECTOR], IARG_UINT32, 1, IARG_END);
+        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[VECTOR], IARG_END);
     } 
     else if (cat == XED_CATEGORY_CMOV) {
-        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[CMOV], IARG_UINT32, 1, IARG_END);
+        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[CMOV], IARG_END);
     } 
     else if (cat == XED_CATEGORY_MMX || cat == XED_CATEGORY_SSE) {
-        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[MMX_SSE], IARG_UINT32, 1, IARG_END);
+        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[MMX_SSE], IARG_END);
     } 
     else if (cat == XED_CATEGORY_SYSCALL) {
-        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[SYSCALL], IARG_UINT32, 1, IARG_END);
+        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[SYSCALL], IARG_END);
     }
     else {
-        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[OTHER], IARG_UINT32, 1, IARG_END);
+        INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)AddToCounter, IARG_PTR, &Counters[OTHER], IARG_END);
     }
 }
 
