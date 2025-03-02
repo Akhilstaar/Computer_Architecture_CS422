@@ -180,7 +180,13 @@ has two tuples separated by a colon. The first tuple specifies the
 instruction address and the size of the instruction in bytes. The second tuple specifies
 the data address and the amount of data accessed in bytes.
 
-(1000, 4):(0, 4), (1004, 4):(4, 4), (1008, 4):(8, 4), (1012, 2):(500, 2), (1014, 6):(200, 8), (1020, 1):(220, 8), (1021, 4):(80, 8).
+(1000, 4):(0, 4), 
+(1004, 4):(4, 4), 
+(1008, 4):(8, 4), 
+(1012, 2):(500, 2), 
+(1014, 6):(200, 8), 
+(1020, 1):(220, 8), 
+(1021, 4):(80, 8).
 
 This application touches five different 32-byte data chunks starting at addresses
 0 (the first three accesses), 64 (the last access), 192 (the fifth and part of the sixth
