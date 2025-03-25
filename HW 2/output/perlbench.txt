@@ -1,17 +1,15 @@
 ===============================================
+Direction Predictors :
+FNBT : Accesses 130055041, Mispredictions 53806751(0.413723) , Forward branches 104060375 , Forward mispredictions 39203450 (0.376738), Backward branches 25994666, Backward mispredictions 14603301(0.561781)
+Bimodal : Accesses 130055041, Mispredictions 12312204(0.0946692) , Forward branches 104060375 , Forward mispredictions 10250281 (0.0985032), Backward branches 25994666, Backward mispredictions 2061923(0.079321)
+SAg : Accesses 130055041, Mispredictions 4756628(0.036574) , Forward branches 104060375 , Forward mispredictions 3883277 (0.0373175), Backward branches 25994666, Backward mispredictions 873351(0.0335973)
+GAg : Accesses 130055041, Mispredictions 15250575(0.117262) , Forward branches 104060375 , Forward mispredictions 12911286 (0.124075), Backward branches 25994666, Backward mispredictions 2339289(0.0899911)
+gshare : Accesses 130055041, Mispredictions 13140254(0.101036) , Forward branches 104060375 , Forward mispredictions 10610363 (0.101964), Backward branches 25994666, Backward mispredictions 2529891(0.0973235)
+Hybrid SAg-GAg : Accesses 130055041, Mispredictions 4035770(0.0310312) , Forward branches 104060375 , Forward mispredictions 3309506 (0.0318037), Backward branches 25994666, Backward mispredictions 726264(0.027939)
+Hybrid Majority : Accesses 130055041, Mispredictions 6491210(0.0499113) , Forward branches 104060375 , Forward mispredictions 5258123 (0.0505295), Backward branches 25994666, Backward mispredictions 1233087(0.0474362)
+Hybrid Tournament : Accesses 130055041, Mispredictions 3645158(0.0280278) , Forward branches 104060375 , Forward mispredictions 3022316 (0.0290439), Backward branches 25994666, Backward mispredictions 622842(0.0239604)
 
-Branch Predictor Statistics:
-FNBT : Accesses 130003623, Mispredictions 53718727(0.413209) , Forward branches 103948735 , Forward mispredictions 39086234 (0.376015), Backward branches 26054888, Backward mispredictions 14632493(0.561603)
-Bimodal : Accesses 130003623, Mispredictions 12662851(0.0974038) , Forward branches 103948735 , Forward mispredictions 10398180 (0.100032), Backward branches 26054888, Backward mispredictions 2264671(0.0869192)
-SAg : Accesses 130003623, Mispredictions 4762438(0.0366331) , Forward branches 103948735 , Forward mispredictions 3893962 (0.0374604), Backward branches 26054888, Backward mispredictions 868476(0.0333326)
-GAg : Accesses 130003623, Mispredictions 15321387(0.117854) , Forward branches 103948735 , Forward mispredictions 12965273 (0.124728), Backward branches 26054888, Backward mispredictions 2356114(0.0904289)
-gshare : Accesses 130003623, Mispredictions 13224403(0.101723) , Forward branches 103948735 , Forward mispredictions 10705306 (0.102986), Backward branches 26054888, Backward mispredictions 2519097(0.0966842)
-Hybrid SAg-GAg : Accesses 130003623, Mispredictions 8674398(0.0667243) , Forward branches 103948735 , Forward mispredictions 7175193 (0.0690263), Backward branches 26054888, Backward mispredictions 1499205(0.0575403)
-Hybrid Majority : Accesses 130003623, Mispredictions 6503839(0.0500281) , Forward branches 103948735 , Forward mispredictions 5280736 (0.0508013), Backward branches 26054888, Backward mispredictions 1223103(0.0469433)
-Hybrid Tournament : Accesses 130003623, Mispredictions 14353271(0.110407) , Forward branches 103948735 , Forward mispredictions 11779945 (0.113325), Backward branches 26054888, Backward mispredictions 2573326(0.0987656)
-
-Branch Target Predictor
-===============================================
-BTB1 : Accesses 28101229, Missses 3236(0.000115155) , Mispredictions 9901591 (0.352354)
-BTB2 : Accesses 28101229, Missses 437490(0.0155684) , Mispredictions 2920283 (0.10392)
+Branch Target Predictor :
+BTB1 : Accesses 28119019, Missses 3310(0.000117714) , Mispredictions 9835186 (0.34977)
+BTB2 : Accesses 28119019, Missses 435375(0.0154833) , Mispredictions 2901127 (0.103173)
 ===============================================

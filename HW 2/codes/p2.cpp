@@ -136,9 +136,8 @@ ADDRINT Terminate(void)
 
 VOID PrintResults(void)
 {
-    *out << "===============================================" << endl;
-    *out << endl;
-    *out << "Branch Predictor Statistics:" << endl;
+    *out << "===============================================\n";
+    *out << "Direction Predictors :" << endl;
     
     const char *bp_names[] = {"FNBT", "Bimodal", "SAg", "GAg", "gshare", "Hybrid SAg-GAg", "Hybrid Majority", "Hybrid Tournament"};
     
@@ -148,12 +147,11 @@ VOID PrintResults(void)
         double backward_rate = bp_stats[i].backward > 0 ? (double)bp_stats[i].backward_misp / bp_stats[i].backward : 0;
         double overall_rate = bp_stats[i].total > 0 ? (double)bp_stats[i].mispredictions / bp_stats[i].total : 0;
         
-        *out << bp_names[i] << " : Accesses " << bp_stats[i].total << ", Mispredictions " << bp_stats[i].mispredictions << "(" << overall_rate << ") , " << "Forward branches " << bp_stats[i].forward << " , Forward mispredictions " << bp_stats[i].forward_misp << " (" << forward_rate << "), Backward branches " << bp_stats[i].backward << ", Backward mispredictions " << bp_stats[i].backward_misp << "(" << backward_rate << ")" << endl;
+        *out << bp_names[i] << " : Accesses " << bp_stats[i].total << ", Mispredictions " << bp_stats[i].mispredictions << "(" << overall_rate << ") , " << "Forward branches " << bp_stats[i].forward << " , Forward mispredictions " << bp_stats[i].forward_misp << " (" << forward_rate << "), Backward branches " << bp_stats[i].backward << ", Backward mispredictions " << bp_stats[i].backward_misp << "(" << backward_rate << ")\n\n";
     }
     
     *out << endl;
-    *out << "Branch Target Predictor";
-    *out << "\n===============================================\n";
+    *out << "Branch Target Predictors :\n";
     
     const char *target_names[] = {"BTB1", "BTB2"};
     for (INT32 i = 0; i < 2; i++)
@@ -172,22 +170,22 @@ VOID InitPredictors()
 {
     // Bimodal: 512 entries, 2-bit counters initialized to 2 (weakly taken)
     for (int i = 0; i < BIMODAL_SIZE; i++)
-        bimodal_pht[i] = 2;
+        bimodal_pht[i] = 0;
     // SAg: BHT 1024 entries, 9-bit history initialized to 0
     memset(sag_bht, 0, sizeof(sag_bht));
     // SAg: PHT 512 entries, 2-bit counters initialized to 2
     for (int i = 0; i < SAG_PHT_SIZE; i++)
-        sag_pht[i] = 2;
+        sag_pht[i] = 0;
     // GAg: PHT 512 entries, 3-bit counters initialized to 4 (weakly taken)
     for (int i = 0; i < GAG_PHT_SIZE; i++)
-        gag_pht[i] = 4;
+        gag_pht[i] = 0;
     // gshare: PHT 512 entries, 3-bit counters initialized to 4 (weakly taken)
     for (int i = 0; i < GSHARE_PHT_SIZE; i++)
-        gshare_pht[i] = 4;
+        gshare_pht[i] = 0;
     // Hybrid meta-predictors: 512 entries each, 2-bit counters initialized to 1 (neutral)
-    memset(hybrid_meta_sag_gag, 1, sizeof(hybrid_meta_sag_gag));
-    memset(hybrid_meta_gag_gshare, 1, sizeof(hybrid_meta_gag_gshare));
-    memset(hybrid_meta_gshare_sag, 1, sizeof(hybrid_meta_gshare_sag));
+    memset(hybrid_meta_sag_gag, 0, sizeof(hybrid_meta_sag_gag));
+    memset(hybrid_meta_gag_gshare, 0, sizeof(hybrid_meta_gag_gshare));
+    memset(hybrid_meta_gshare_sag, 0, sizeof(hybrid_meta_gshare_sag));
     // BTBs are zero-initialized by default (valid = false)
 
     return;
@@ -213,7 +211,7 @@ BOOL PredictGAg()
 
 BOOL PredictGshare(ADDRINT pc)
 {
-    UINT32 index = (pc ^ gag_ghr) % GSHARE_PHT_SIZE;
+    UINT32 index = (pc ^ gshare_ghr) % GSHARE_PHT_SIZE;
     return gshare_pht[index] >= 4; // Predict taken if counter >= 4 (3-bit counter midpoint)
 }
 
@@ -246,6 +244,16 @@ BOOL PredictHybridTournament(ADDRINT pc)
 /* Update branch predictor state */
 VOID UpdateBranchPredictors(ADDRINT pc, BOOL taken)
 {
+    // critical section for correctness i guess
+    BOOL sag_correct = (PredictSAg(pc) == taken);
+    BOOL gag_correct = (PredictGAg() == taken);
+    BOOL gshare_correct = (PredictGshare(pc) == taken);
+    //new
+    UINT32 meta_idx = gag_ghr % HYBRID_META_SIZE;
+    //new
+    // don't do it after updation of predictors, i think this might be an issue 
+
+
     // Update Bimodal
     UINT32 idx;
     idx = pc % BIMODAL_SIZE;
@@ -268,10 +276,6 @@ VOID UpdateBranchPredictors(ADDRINT pc, BOOL taken)
     gshare_ghr = ((gshare_ghr << 1) | taken) & 0x1FF;
 
     // Update Meta-Predictors based on correctness
-    BOOL sag_correct = (PredictSAg(pc) == taken);
-    BOOL gag_correct = (PredictGAg() == taken);
-    BOOL gshare_correct = (PredictGshare(pc) == taken);
-    UINT32 meta_idx = gag_ghr % HYBRID_META_SIZE;
     if (sag_correct != gag_correct)
     {
         hybrid_meta_sag_gag[meta_idx] = CLAMP(hybrid_meta_sag_gag[meta_idx] + (sag_correct ? -1 : 1), 0, 3);
@@ -282,7 +286,7 @@ VOID UpdateBranchPredictors(ADDRINT pc, BOOL taken)
     }
     if (gshare_correct != sag_correct)
     {
-        hybrid_meta_gshare_sag[meta_idx] = CLAMP(hybrid_meta_gshare_sag[meta_idx] + (gshare_correct ? -1 : 1), 0, 3);
+        hybrid_meta_gshare_sag[meta_idx] = CLAMP(hybrid_meta_gshare_sag[meta_idx] + (gshare_correct ? 1 : -1), 0, 3);
     }
 
     return;
@@ -534,7 +538,7 @@ int main(int argc, char *argv[])
     PIN_AddFiniFunction(Fini, 0);
 
     cerr << "===============================================" << endl;
-    cerr << "This application is instrumented by HW2" << endl;
+    cerr << "This application is instrumented by CS422 HW2" << endl;
     if (!KnobOutputFile.Value().empty())
         cerr << "See file " << KnobOutputFile.Value() << " for analysis results" << endl;
     cerr << "===============================================" << endl;
