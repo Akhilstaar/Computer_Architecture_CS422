@@ -1,0 +1,17 @@
+===============================================
+
+Branch Predictor Statistics:
+FNBT : Accesses 130003623, Mispredictions 53718727(0.413209) , Forward branches 103948735 , Forward mispredictions 39086234 (0.376015), Backward branches 26054888, Backward mispredictions 14632493(0.561603)
+Bimodal : Accesses 130003623, Mispredictions 12662851(0.0974038) , Forward branches 103948735 , Forward mispredictions 10398180 (0.100032), Backward branches 26054888, Backward mispredictions 2264671(0.0869192)
+SAg : Accesses 130003623, Mispredictions 4762438(0.0366331) , Forward branches 103948735 , Forward mispredictions 3893962 (0.0374604), Backward branches 26054888, Backward mispredictions 868476(0.0333326)
+GAg : Accesses 130003623, Mispredictions 15321387(0.117854) , Forward branches 103948735 , Forward mispredictions 12965273 (0.124728), Backward branches 26054888, Backward mispredictions 2356114(0.0904289)
+gshare : Accesses 130003623, Mispredictions 13224403(0.101723) , Forward branches 103948735 , Forward mispredictions 10705306 (0.102986), Backward branches 26054888, Backward mispredictions 2519097(0.0966842)
+Hybrid SAg-GAg : Accesses 130003623, Mispredictions 8674398(0.0667243) , Forward branches 103948735 , Forward mispredictions 7175193 (0.0690263), Backward branches 26054888, Backward mispredictions 1499205(0.0575403)
+Hybrid Majority : Accesses 130003623, Mispredictions 6503839(0.0500281) , Forward branches 103948735 , Forward mispredictions 5280736 (0.0508013), Backward branches 26054888, Backward mispredictions 1223103(0.0469433)
+Hybrid Tournament : Accesses 130003623, Mispredictions 14353271(0.110407) , Forward branches 103948735 , Forward mispredictions 11779945 (0.113325), Backward branches 26054888, Backward mispredictions 2573326(0.0987656)
+
+Branch Target Predictor
+===============================================
+BTB1 : Accesses 28101229, Missses 3236(0.000115155) , Mispredictions 9901591 (0.352354)
+BTB2 : Accesses 28101229, Missses 437490(0.0155684) , Mispredictions 2920283 (0.10392)
+===============================================
