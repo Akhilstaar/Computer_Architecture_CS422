@@ -895,12 +895,12 @@ void Mipc::func_mfhi(Mipc *mc, unsigned ins)
    {
       mc->ID_EX_NXT._opResultLo = mc->EX_MEM_NXTUR._opResultHi;
    }
-   #ifdef BYPASS_MEM_EX_ENABLED
-      else if (mc->ID_EX_NXT._bypassSRC1 == BYPASS_MEM_EX)
-      {
-         mc->ID_EX_NXT._opResultLo = mc->MEM_WB_CUR._opResultHi;
-      }
-   #endif
+#ifdef BYPASS_MEM_EX_ENABLED
+   else if (mc->ID_EX_NXT._bypassSRC1 == BYPASS_MEM_EX)
+   {
+      mc->ID_EX_NXT._opResultLo = mc->MEM_WB_CUR._opResultHi;
+   }
+#endif
    else
    {
       mc->ID_EX_NXT._opResultLo = mc->_hi;
@@ -912,21 +912,23 @@ void Mipc::func_mfhi(Mipc *mc, unsigned ins)
 
 void Mipc::func_mflo(Mipc *mc, unsigned ins)
 {
-   #ifdef BYPASS_ENABLED
-   if(mc->ID_EX_NXT._bypassSRC1 == BYPASS_EX_EX) {
+#ifdef BYPASS_ENABLED
+   if (mc->ID_EX_NXT._bypassSRC1 == BYPASS_EX_EX)
+   {
       mc->ID_EX_NXT._opResultLo = mc->EX_MEM_NXTUR._opResultLo;
    }
 #ifdef BYPASS_MEM_EX_ENABLED
-   else if(mc->ID_EX_NXT._bypassSRC1 == BYPASS_MEM_EX) {
+   else if (mc->ID_EX_NXT._bypassSRC1 == BYPASS_MEM_EX)
+   {
       mc->ID_EX_NXT._opResultLo = mc->MEM_WB_CUR._opResultLo;
    }
 #endif
-   else {
+   else
+   {
       mc->ID_EX_NXT._opResultLo = mc->_lo;
    }
 #else
-   mc->ID_EX_NXT._opResultLo = mc->_lo;
-#endif}
+}
 
 void Mipc::func_mthi(Mipc *mc, unsigned ins)
 {
