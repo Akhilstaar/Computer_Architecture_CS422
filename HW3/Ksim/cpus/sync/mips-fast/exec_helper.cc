@@ -14,7 +14,7 @@
  */
 
 // Called twice: once for hazard checks (real=FALSE), once for reg read (real=TRUE)
-void Mipc::Dec(unsigned int ins, BOOL real)
+void Mipc::Dec(unsigned int ins, Bool real)
 {
    MipsInsn i;
    i.data = ins;
@@ -30,7 +30,7 @@ void Mipc::Dec(unsigned int ins, BOOL real)
    unsigned int _pc = IF_ID_NXT._pc;
    signed int _decodedSRC1 = 0, _decodedSRC2 = 0;
    unsigned _regSRC1 = DEFAULT_REG_VALUE, _regSRC2 = DEFAULT_REG_VALUE;
-   Bool _requireFPArg = FALSE;
+   Bool _requiresFP = FALSE;
    Bool _hiWrite = FALSE, _loWrite = FALSE;
    unsigned _decodedDST = 0;
    unsigned _subregOperand = 0;
@@ -702,7 +702,7 @@ void Mipc::Dec(unsigned int ins, BOOL real)
          _hiWPort = FALSE;
          _loWPort = FALSE;
          _memControl = FALSE;
-         _requireFPArg = TRUE;
+         _requiresFP = TRUE;
          break;
       default:
          _isIllegalOp = TRUE;
@@ -728,7 +728,7 @@ void Mipc::Dec(unsigned int ins, BOOL real)
    IF_ID_NXT._decodedSRC2 = _decodedSRC2; // Reg fetch output (source values)
    IF_ID_NXT._regSRC1 = _regSRC1;
    IF_ID_NXT._regSRC2 = _regSRC2;
-   IF_ID_NXT._requireFPArg = _requireFPArg;
+   IF_ID_NXT._requiresFP = _requiresFP;
    IF_ID_NXT._hiWrite = _hiWrite;
    IF_ID_NXT._loWrite = _loWrite;
    IF_ID_NXT._decodedDST = _decodedDST;       // Decoder output (dest reg no)
@@ -771,7 +771,7 @@ void Mipc::dumpregs(void)
 
 void Mipc::func_add_addu(Mipc *mc, unsigned ins)
 {
-   mc->ID_EX_NXT._opResultLo = mc->_decodedSRC1 + mc->_decodedSRC2;
+   mc->ID_EX_NXT._opResultLo = mc->ID_EX_NXT._decodedSRC1 + mc->ID_EX_NXT._decodedSRC2;
    // printf("Encountered unimplemented instruction: add or addu.\n");
    // printf("You need to fill in func_add_addu in exec_helper.cc to proceed forward.\n");
    // exit(0);
@@ -779,28 +779,28 @@ void Mipc::func_add_addu(Mipc *mc, unsigned ins)
 
 void Mipc::func_and(Mipc *mc, unsigned ins)
 {
-   mc->ID_EX_NXT._opResultLo = mc->_decodedSRC1 & mc->_decodedSRC2;
+   mc->ID_EX_NXT._opResultLo = mc->ID_EX_NXT._decodedSRC1 & mc->ID_EX_NXT._decodedSRC2;
 }
 
 void Mipc::func_nor(Mipc *mc, unsigned ins)
 {
-   mc->ID_EX_NXT._opResultLo = ~(mc->_decodedSRC1 | mc->_decodedSRC2);
+   mc->ID_EX_NXT._opResultLo = ~(mc->ID_EX_NXT._decodedSRC1 | mc->ID_EX_NXT._decodedSRC2);
 }
 
 void Mipc::func_or(Mipc *mc, unsigned ins)
 {
-   mc->ID_EX_NXT._opResultLo = mc->_decodedSRC1 | mc->_decodedSRC2;
+   mc->ID_EX_NXT._opResultLo = mc->ID_EX_NXT._decodedSRC1 | mc->ID_EX_NXT._decodedSRC2;
 }
 
 void Mipc::func_sll(Mipc *mc, unsigned ins)
 {
-   mc->ID_EX_NXT._opResultLo = mc->_decodedSRC2 << mc->_decodedShiftAmt;
+   mc->ID_EX_NXT._opResultLo = mc->ID_EX_NXT._decodedSRC2 << mc->ID_EX_NXT._decodedShiftAmt;
 }
 
 void Mipc::func_sllv(Mipc *mc, unsigned ins)
 {
 
-   mc->ID_EX_NXT._opResultLo = (unsigned)mc->_decodedSRC2 << (mc->_decodedSRC1 & 0x1f);
+   mc->ID_EX_NXT._opResultLo = (unsigned)mc->ID_EX_NXT._decodedSRC2 << (mc->ID_EX_NXT._decodedSRC1 & 0x1f);
    // printf("Encountered unimplemented instruction: sllv.\n");
    // printf("You need to fill in func_sllv in exec_helper.cc to proceed forward.\n");
    // exit(0);
@@ -808,7 +808,7 @@ void Mipc::func_sllv(Mipc *mc, unsigned ins)
 
 void Mipc::func_slt(Mipc *mc, unsigned ins)
 {
-   if (mc->_decodedSRC1 < mc->_decodedSRC2)
+   if (mc->ID_EX_NXT._decodedSRC1 < mc->ID_EX_NXT._decodedSRC2)
    {
       mc->ID_EX_NXT._opResultLo = 1;
    }
@@ -820,7 +820,7 @@ void Mipc::func_slt(Mipc *mc, unsigned ins)
 
 void Mipc::func_sltu(Mipc *mc, unsigned ins)
 {
-   if ((unsigned)mc->_decodedSRC1 < (unsigned)mc->_decodedSRC2)
+   if ((unsigned)mc->ID_EX_NXT._decodedSRC1 < (unsigned)mc->ID_EX_NXT._decodedSRC2)
    {
       mc->ID_EX_NXT._opResultLo = 1;
    }
@@ -832,40 +832,40 @@ void Mipc::func_sltu(Mipc *mc, unsigned ins)
 
 void Mipc::func_sra(Mipc *mc, unsigned ins)
 {
-   mc->ID_EX_NXT._opResultLo = mc->_decodedSRC2 >> mc->_decodedShiftAmt;
+   mc->ID_EX_NXT._opResultLo = mc->ID_EX_NXT._decodedSRC2 >> mc->ID_EX_NXT._decodedShiftAmt;
 }
 
 void Mipc::func_srav(Mipc *mc, unsigned ins)
 {
-   mc->ID_EX_NXT._opResultLo = mc->_decodedSRC2 >> (mc->_decodedSRC1 & 0x1f);
+   mc->ID_EX_NXT._opResultLo = mc->ID_EX_NXT._decodedSRC2 >> (mc->ID_EX_NXT._decodedSRC1 & 0x1f);
 }
 
 void Mipc::func_srl(Mipc *mc, unsigned ins)
 {
-   mc->ID_EX_NXT._opResultLo = (unsigned)mc->_decodedSRC2 >> mc->_decodedShiftAmt;
+   mc->ID_EX_NXT._opResultLo = (unsigned)mc->ID_EX_NXT._decodedSRC2 >> mc->ID_EX_NXT._decodedShiftAmt;
 }
 
 void Mipc::func_srlv(Mipc *mc, unsigned ins)
 {
-   mc->ID_EX_NXT._opResultLo = (unsigned)mc->_decodedSRC2 >> (mc->_decodedSRC1 & 0x1f);
+   mc->ID_EX_NXT._opResultLo = (unsigned)mc->ID_EX_NXT._decodedSRC2 >> (mc->ID_EX_NXT._decodedSRC1 & 0x1f);
 }
 
 void Mipc::func_sub_subu(Mipc *mc, unsigned ins)
 {
-   mc->ID_EX_NXT._opResultLo = (unsigned)mc->_decodedSRC1 - (unsigned)mc->_decodedSRC2;
+   mc->ID_EX_NXT._opResultLo = (unsigned)mc->ID_EX_NXT._decodedSRC1 - (unsigned)mc->ID_EX_NXT._decodedSRC2;
 }
 
 void Mipc::func_xor(Mipc *mc, unsigned ins)
 {
-   mc->ID_EX_NXT._opResultLo = mc->_decodedSRC1 ^ mc->_decodedSRC2;
+   mc->ID_EX_NXT._opResultLo = mc->ID_EX_NXT._decodedSRC1 ^ mc->ID_EX_NXT._decodedSRC2;
 }
 
 void Mipc::func_div(Mipc *mc, unsigned ins)
 {
-   if (mc->_decodedSRC2 != 0)
+   if (mc->ID_EX_NXT._decodedSRC2 != 0)
    {
-      ID_EX_NXT.mc->_opResultHi = (unsigned)(mc->_decodedSRC1 % mc->_decodedSRC2);
-      mc->ID_EX_NXT._opResultLo = (unsigned)(mc->_decodedSRC1 / mc->_decodedSRC2);
+      mc->ID_EX_NXT._opResultHi = (unsigned)(mc->ID_EX_NXT._decodedSRC1 % mc->ID_EX_NXT._decodedSRC2);
+      mc->ID_EX_NXT._opResultLo = (unsigned)(mc->ID_EX_NXT._decodedSRC1 / mc->ID_EX_NXT._decodedSRC2);
    }
    else
    {
@@ -876,10 +876,10 @@ void Mipc::func_div(Mipc *mc, unsigned ins)
 
 void Mipc::func_divu(Mipc *mc, unsigned ins)
 {
-   if ((unsigned)mc->_decodedSRC2 != 0)
+   if ((unsigned)mc->ID_EX_NXT._decodedSRC2 != 0)
    {
-      mc->ID_EX_NXT._opResultHi = (unsigned)(mc->_decodedSRC1) % (unsigned)(mc->_decodedSRC2);
-      mc->ID_EX_NXT._opResultLo = (unsigned)(mc->_decodedSRC1) / (unsigned)(mc->_decodedSRC2);
+      mc->ID_EX_NXT._opResultHi = (unsigned)(mc->ID_EX_NXT._decodedSRC1) % (unsigned)(mc->ID_EX_NXT._decodedSRC2);
+      mc->ID_EX_NXT._opResultLo = (unsigned)(mc->ID_EX_NXT._decodedSRC1) / (unsigned)(mc->ID_EX_NXT._decodedSRC2);
    }
    else
    {
@@ -915,7 +915,7 @@ void Mipc::func_mflo(Mipc *mc, unsigned ins)
 #ifdef BYPASS_ENABLED
    if (mc->ID_EX_NXT._bypassSRC1 == BYPASS_EX_EX)
    {
-      mc->ID_EX_NXT._opResultLo = mc->EX_MEM_NXTUR._opResultLo;
+      mc->ID_EX_NXT._opResultLo = mc->EX_MEM_CUR._opResultLo;
    }
 #ifdef BYPASS_MEM_EX_ENABLED
    else if (mc->ID_EX_NXT._bypassSRC1 == BYPASS_MEM_EX)
@@ -923,21 +923,23 @@ void Mipc::func_mflo(Mipc *mc, unsigned ins)
       mc->ID_EX_NXT._opResultLo = mc->MEM_WB_CUR._opResultLo;
    }
 #endif
-   else
-   {
-      mc->ID_EX_NXT._opResultLo = mc->_lo;
-   }
+else
+{
+   mc->ID_EX_NXT._opResultLo = mc->_lo;
+}
 #else
+   mc->ID_EX_NXT._opResultLo = mc->_lo;
+#endif
 }
 
 void Mipc::func_mthi(Mipc *mc, unsigned ins)
 {
-   mc->ID_EX_NXT._opResultHi = mc->_decodedSRC1;
+   mc->ID_EX_NXT._opResultHi = mc->ID_EX_NXT._decodedSRC1;
 }
 
 void Mipc::func_mtlo(Mipc *mc, unsigned ins)
 {
-   mc->ID_EX_NXT._opResultLo = mc->_decodedSRC1;
+   mc->ID_EX_NXT._opResultLo = mc->ID_EX_NXT._decodedSRC1;
 }
 
 void Mipc::func_mult(Mipc *mc, unsigned ins)

@@ -5,11 +5,14 @@
 
 class Mipc;
 
-class Exe : public SimObject {
+class Exe : public SimObject
+{
 public:
-   Exe (Mipc*);
-   ~Exe ();
-  
+   Exe(Mipc *);
+   ~Exe();
+#ifdef BYPASS_ENABLED
+   void updateInputArgs();
+#endif
    FAKE_SIM_TEMPLATE;
 
    Mipc *_mc;

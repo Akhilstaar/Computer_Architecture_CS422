@@ -17,7 +17,7 @@ typedef unsigned Bool;
 #define FP_TWIDDLE 1
 #endif
 
-#define BYPASS_ENABLED 1        // Enable bypass paths
+// #define BYPASS_ENABLED 1        // Enable bypass paths
 #define BYPASS_MEM_EX_ENABLED 1 // Enable MEM->EX bypass path specifically
 #define DEFAULT_REG_VALUE 10000 // Sentinel value for unused register source
 
@@ -31,7 +31,7 @@ typedef unsigned Bool;
 
 // #define MIPC_DEBUG 1
 
-struct PipeReg
+typedef struct
 {
    unsigned int _pc;  // Program Counter
    unsigned int _ins; // Instruction register
@@ -70,9 +70,9 @@ struct PipeReg
    void (*_memOp)(Mipc *);
 
    void clear();
-};
+} PipeReg;
 
-PipeReg::clear()
+void PipeReg::clear()
 {
    _pc = 0;
    _ins = 0; // NOP instruction
@@ -99,7 +99,7 @@ PipeReg::clear()
 
    _btgt = 0xdeadbeef; // Use a recognizable invalid address
    _btaken = 0;
-   _bd = 0; // Not a branch/jump by default
+   _bdslot = 0; // Not a branch/jump by default
    _opResultLo = 0;
    _opResultHi = 0;
    _memory_addr_reg = 0;
@@ -131,7 +131,7 @@ public:
    // image if any.
 
    void MipcDumpstats();                // Prints simulation statistics
-   void Dec(unsigned int ins);          // Decoder function
+   void Dec(unsigned int ins, Bool real);          // Decoder function
    void fake_syscall(unsigned int ins); // System call interface
 
    PipeReg IF_ID_CUR, ID_EX_CUR, EX_MEM_CUR, MEM_WB_CUR;
@@ -147,10 +147,11 @@ public:
    } _fpr[16]; // floating-point registers (paired)
 
    unsigned int _hi, _lo; // mult, div destination
+   unsigned int _pc;
    // unsigned int _lastbdslot;			// branch delay state
    unsigned int _boot; // boot code loaded?
 
-   Bool _isSyscallInPipe;
+   Bool _waitForSSyscall;
    Bool _toStall;
    Bool _isSubRegOps;
 #ifdef BRANCH_INTERLOCK
@@ -166,6 +167,7 @@ public:
    LL _num_load;
    LL _num_store;
    LL _fpinst;
+   // LL _load_interlock_cycles;
 
    Mem *_mem; // attached memory (not a cache)
 

@@ -35,7 +35,7 @@ void Decode::MainLoop(void)
       _mc->IF_ID_NXT._bypassSRC1 = BYPASS_NONE;
       _mc->IF_ID_NXT._bypassSRC2 = BYPASS_NONE;
 #endif
-      // Call Dec with actual=FALSE
+      // Call Dec with FALSE, to check if instruction.
       _mc->Dec(ins, FALSE);
       if (!_mc->IF_ID_NXT._isIllegalOp)
       {
@@ -43,18 +43,21 @@ void Decode::MainLoop(void)
          _mc->_toStall = computeBypass();
 #else
          _mc->_toStall = detectStalls();
-#endif
+         #endif
+      }
+      else{
+         _mc->_toStall = TRUE; // consider illegal op as NOP. for now i.e continue execution after it.
       }
 
-      if (!_mc->_toStall && _mc->IF_ID_C._isSyscall)
+      if (!_mc->_toStall && _mc->IF_ID_NXT._isSyscall)
       {
-         _mc->_isSyscallInPipe = TRUE;
+         _mc->_waitForSSyscall = TRUE;
       }
 
       AWAIT_P_PHI1; // @negedge
 
       if (_mc->_toStall)
-         _mc->ID_EX_CUR.clear();
+         _mc->ID_EX_CUR.clear(); // or ID_EX_CUR = NOP  
       else
       {
          _mc->Dec(ins, TRUE);

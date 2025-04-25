@@ -33,7 +33,7 @@ void Mipc::MainLoop(void)
       AWAIT_P_PHI0; // @posedge
       AWAIT_P_PHI1; // @negedge
 
-      if (_isSyscallInPipe)
+      if (_waitForSSyscall)
       {
          IF_ID_CUR.clear();
          continue;
@@ -58,11 +58,12 @@ void Mipc::MainLoop(void)
       IF_ID_CUR._pc = _pc;
       IF_ID_CUR._ins = ins;
       _nfetched++;
+      _pc += 4;
       
-      if (_pc == addr)
-      { // Check if PC wasn't updated by EX
-         _pc += 4;
-      }
+      // if (_pc == addr)
+      // { // Check if PC wasn't updated by EX
+      //    _pc += 4;
+      // }
    }
 
    MipcDumpstats();
@@ -135,7 +136,7 @@ void Mipc::Reboot(char *image)
       fclose(fp);
 
       // Reset state
-      _isSyscallInPipe = FALSE;
+      _waitForSSyscall = FALSE;
       _toStall = FALSE;
       _isSubRegOps = FALSE;
 #ifdef BRANCH_INTERLOCK
@@ -148,7 +149,7 @@ void Mipc::Reboot(char *image)
       _num_cond_br = 0;
       _num_jal = 0;
       _num_jr = 0;
-      _load_interlock_cycles = 0;
+      // _load_interlock_cycles = 0;
 
       IF_ID_CUR.clear();
       IF_ID_NXT.clear();
