@@ -19,7 +19,7 @@ typedef unsigned Bool;
 
 // #define BYPASS_ENABLED 1        // Enable bypass paths
 #define BYPASS_MEM_EX_ENABLED 1 // Enable MEM->EX bypass path specifically
-#define DEFAULT_REG_VALUE 10000 // Sentinel value for unused register source
+#define REG_DEFAULT 10000 // Sentinel value for unused register source
 
 #define BYPASS_NONE 0x01
 #define BYPASS_EX_EX 0x02  // Forward from EX stage (result available end of EX)
@@ -53,7 +53,7 @@ typedef struct
    signed int _branchOffset; // Branch offset
 
 #ifdef BYPASS_ENABLED
-   unsigned _bypassSRC1, _bypassSRC2;
+   unsigned _bypSRC1, _bypSRC2;
 #endif
 
    // Execute (EX) stage
@@ -83,8 +83,8 @@ void PipeReg::clear()
    _decodedDST = 0;
    _decodedSRC1 = 0;
    _decodedSRC2 = 0;
-   _regSRC1 = DEFAULT_REG_VALUE;
-   _regSRC2 = DEFAULT_REG_VALUE;
+   _regSRC1 = REG_DEFAULT;
+   _regSRC2 = REG_DEFAULT;
    _decodedShiftAmt = 0;
    _requiresFP = FALSE;
    _hiWrite = FALSE;
@@ -93,8 +93,8 @@ void PipeReg::clear()
    _subregOperand = 0;
    _branchOffset = 0;
 #ifdef BYPASS_ENABLED
-   _bypassSRC1 = BYPASS_NONE;
-   _bypassSRC2 = BYPASS_NONE;
+   _bypSRC1 = BYPASS_NONE;
+   _bypSRC2 = BYPASS_NONE;
 #endif
 
    _btgt = 0xdeadbeef; // Use a recognizable invalid address
@@ -151,9 +151,9 @@ public:
    // unsigned int _lastbdslot;			// branch delay state
    unsigned int _boot; // boot code loaded?
 
-   Bool _waitForSSyscall;
+   Bool _waitForSyscall;
    Bool _toStall;
-   Bool _isSubRegOps;
+   Bool is_subreg;
 #ifdef BRANCH_INTERLOCK
    Bool _branchInterlock;
 #endif

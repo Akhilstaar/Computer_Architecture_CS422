@@ -24,6 +24,7 @@ void Writeback::MainLoop(void)
       AWAIT_P_PHI0; // @posedge
 
       _mc->MEM_WB_NXT = _mc->MEM_WB_CUR;
+
       // Sample the important signals
       writeReg = _mc->MEM_WB_NXT._writeREG;
       writeFReg = _mc->MEM_WB_NXT._writeFREG;
@@ -43,7 +44,7 @@ void Writeback::MainLoop(void)
 #endif
          _mc->MEM_WB_NXT._opControl(_mc, ins);
          _mc->_pc = _mc->MEM_WB_NXT._pc + 4;
-         _mc->_waitForSSyscall = FALSE;
+         _mc->_waitForSyscall = FALSE;
       }
       else if (isIllegalOp)
       {

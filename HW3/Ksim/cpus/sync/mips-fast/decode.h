@@ -10,9 +10,9 @@ public:
    Decode (Mipc*);
    ~Decode ();
 #ifdef BYPASS_ENABLED
-   Bool computeBypass();
+   Bool check_bypass(PipeReg &IF_ID_NXT);
 #else 
-   Bool detectStalls();
+   Bool check_stall(PipeReg &IF_ID_NXT);
 #endif   
   
    FAKE_SIM_TEMPLATE;

@@ -11,7 +11,7 @@ public:
    Exe(Mipc *);
    ~Exe();
 #ifdef BYPASS_ENABLED
-   void updateInputArgs();
+   void update_bypass(PipeReg &ID_EX_NXT);
 #endif
    FAKE_SIM_TEMPLATE;
 

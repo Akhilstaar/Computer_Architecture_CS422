@@ -29,7 +29,7 @@ void Mipc::Dec(unsigned int ins, Bool real)
 
    unsigned int _pc = IF_ID_NXT._pc;
    signed int _decodedSRC1 = 0, _decodedSRC2 = 0;
-   unsigned _regSRC1 = DEFAULT_REG_VALUE, _regSRC2 = DEFAULT_REG_VALUE;
+   unsigned _regSRC1 = REG_DEFAULT, _regSRC2 = REG_DEFAULT;
    Bool _requiresFP = FALSE;
    Bool _hiWrite = FALSE, _loWrite = FALSE;
    unsigned _decodedDST = 0;
@@ -61,7 +61,7 @@ void Mipc::Dec(unsigned int ins, Bool real)
       x >>= 16;            \
    } while (0)
 
-   _isSubRegOps = FALSE;
+   is_subreg = FALSE;
 
    switch (i.reg.op)
    {
@@ -543,7 +543,7 @@ void Mipc::Dec(unsigned int ins, Bool real)
       _hiWPort = FALSE;
       _loWPort = FALSE;
       _memControl = TRUE;
-      _isSubRegOps = TRUE;
+      is_subreg = TRUE;
       break;
 
    case 0x23: // lw
@@ -574,7 +574,7 @@ void Mipc::Dec(unsigned int ins, Bool real)
       _hiWPort = FALSE;
       _loWPort = FALSE;
       _memControl = TRUE;
-      _isSubRegOps = TRUE;
+      is_subreg = TRUE;
       break;
 
    case 0x31: // lwc1
@@ -891,12 +891,12 @@ void Mipc::func_divu(Mipc *mc, unsigned ins)
 void Mipc::func_mfhi(Mipc *mc, unsigned ins)
 {
 #ifdef BYPASS_ENABLED
-   if (mc->ID_EX_NXT._bypassSRC1 == BYPASS_EX_EX)
+   if (mc->ID_EX_NXT._bypSRC1 == BYPASS_EX_EX)
    {
       mc->ID_EX_NXT._opResultLo = mc->EX_MEM_NXTUR._opResultHi;
    }
 #ifdef BYPASS_MEM_EX_ENABLED
-   else if (mc->ID_EX_NXT._bypassSRC1 == BYPASS_MEM_EX)
+   else if (mc->ID_EX_NXT._bypSRC1 == BYPASS_MEM_EX)
    {
       mc->ID_EX_NXT._opResultLo = mc->MEM_WB_CUR._opResultHi;
    }
@@ -913,12 +913,12 @@ void Mipc::func_mfhi(Mipc *mc, unsigned ins)
 void Mipc::func_mflo(Mipc *mc, unsigned ins)
 {
 #ifdef BYPASS_ENABLED
-   if (mc->ID_EX_NXT._bypassSRC1 == BYPASS_EX_EX)
+   if (mc->ID_EX_NXT._bypSRC1 == BYPASS_EX_EX)
    {
       mc->ID_EX_NXT._opResultLo = mc->EX_MEM_CUR._opResultLo;
    }
 #ifdef BYPASS_MEM_EX_ENABLED
-   else if (mc->ID_EX_NXT._bypassSRC1 == BYPASS_MEM_EX)
+   else if (mc->ID_EX_NXT._bypSRC1 == BYPASS_MEM_EX)
    {
       mc->ID_EX_NXT._opResultLo = mc->MEM_WB_CUR._opResultLo;
    }

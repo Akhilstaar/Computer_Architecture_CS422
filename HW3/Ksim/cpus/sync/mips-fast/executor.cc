@@ -8,9 +8,28 @@ Exe::Exe(Mipc *mc)
 Exe::~Exe(void) {}
 
 #ifdef BYPASS_ENABLED
-void Exe::updateInputArgs(void)
+void Exe::update_bypass(PipeReg &ID_EX_NXT)
 {
-   // TODO: implement updation logic.
+   if (ID_EX_NXT._bypSRC1 == BYPASS_EX_EX)
+   {
+      ID_EX_NXT._decodedSRC1 = _mc->EX_MEM_CUR._opResultLo;
+   }
+#ifdef BYPASS_MEM_EX_ENABLED
+   else if (ID_EX_NXT._bypSRC1 == BYPASS_MEM_EX)
+   {
+      ID_EX_NXT._decodedSRC1 = _mc->MEM_WB_CUR._opResultLo;
+   }
+#endif
+   if (ID_EX_NXT._bypSRC2 == BYPASS_EX_EX)
+   {
+      ID_EX_NXT._decodedSRC2 = _mc->EX_MEM_CUR._opResultLo;
+   }
+#ifdef BYPASS_MEM_EX_ENABLED
+   else if (ID_EX_NXT._bypSRC2 == BYPASS_MEM_EX)
+   {
+      ID_EX_NXT._decodedSRC2 = _mc->MEM_WB_CUR._opResultLo;
+   }
+#endif
 }
 #endif
 
@@ -30,6 +49,9 @@ void Exe::MainLoop(void)
       {
          if (_mc->ID_EX_NXT._opControl != NULL)
          {
+#ifdef BYPASS_ENABLED
+            update_bypass(_mc->ID_EX_NXT);
+#endif
             _mc->ID_EX_NXT._opControl(_mc, ins);
          }
 #ifdef MIPC_DEBUG

@@ -33,7 +33,7 @@ void Mipc::MainLoop(void)
       AWAIT_P_PHI0; // @posedge
       AWAIT_P_PHI1; // @negedge
 
-      if (_waitForSSyscall)
+      if (_waitForSyscall)
       {
          IF_ID_CUR.clear();
          continue;
@@ -136,9 +136,9 @@ void Mipc::Reboot(char *image)
       fclose(fp);
 
       // Reset state
-      _waitForSSyscall = FALSE;
+      _waitForSyscall = FALSE;
       _toStall = FALSE;
-      _isSubRegOps = FALSE;
+      is_subreg = FALSE;
 #ifdef BRANCH_INTERLOCK
       _branchInterlock = FALSE;
 #endif
